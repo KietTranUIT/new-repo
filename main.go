@@ -1,28 +1,36 @@
 package main
 
 import (
-	"errors"
-	"github.com/ichtrojan/go-todo/routes"
-	"github.com/ichtrojan/thoth"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/ichtrojan/go-todo/routes"
+	"github.com/ichtrojan/thoth"
 )
 
 func main() {
 	logger, _ := thoth.Init("log")
 
-	if err := godotenv.Load(); err != nil {
-		logger.Log(errors.New("no .env file found"))
-		log.Fatal("No .env file found")
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	logger.Log(errors.New("no .env file found"))
+	// 	log.Fatal("No .env file found")
+	// }
 
-	port, exist := os.LookupEnv("PORT")
+	//port, exist := os.LookupEnv("PORT")
 
-	if !exist {
-		logger.Log(errors.New("PORT not set in .env"))
-		log.Fatal("PORT not set in .env")
+	// if !exist {
+	// 	logger.Log(errors.New("PORT not set in .env"))
+	// 	log.Fatal("PORT not set in .env")
+	// }
+
+	// Azure App Service sets the port as an Environment Variable
+	// This can be random, so needs to be loaded at startup
+	port := os.Getenv("HTTP_PLATFORM_PORT")
+
+	// default back to 8080 for local dev
+	if port == "" {
+		port = "8080"
 	}
 
 	err := http.ListenAndServe(":"+port, routes.Init())

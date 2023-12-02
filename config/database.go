@@ -2,40 +2,44 @@ package config
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
+	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/ichtrojan/thoth"
 	_ "github.com/joho/godotenv/autoload"
-	"log"
-	"os"
 )
 
 func Database() *sql.DB {
 	logger, _ := thoth.Init("log")
 
-	user, exist := os.LookupEnv("DB_USER")
+	//user, exist := os.LookupEnv("DB_USER")
 
-	if !exist {
-		logger.Log(errors.New("DB_USER not set in .env"))
-		log.Fatal("DB_USER not set in .env")
-	}
+	// if !exist {
+	// 	logger.Log(errors.New("DB_USER not set in .env"))
+	// 	log.Fatal("DB_USER not set in .env")
+	// }
 
-	pass, exist := os.LookupEnv("DB_PASS")
+	// pass, exist := os.LookupEnv("DB_PASS")
 
-	if !exist {
-		logger.Log(errors.New("DB_PASS not set in .env"))
-		log.Fatal("DB_PASS not set in .env")
-	}
+	// if !exist {
+	// 	logger.Log(errors.New("DB_PASS not set in .env"))
+	// 	log.Fatal("DB_PASS not set in .env")
+	// }
 
-	host, exist := os.LookupEnv("DB_HOST")
+	// host, exist := os.LookupEnv("DB_HOST")
 
-	if !exist {
-		logger.Log(errors.New("DB_HOST not set in .env"))
-		log.Fatal("DB_HOST not set in .env")
-	}
+	// if !exist {
+	// 	logger.Log(errors.New("DB_HOST not set in .env"))
+	// 	log.Fatal("DB_HOST not set in .env")
+	// }
 
-	credentials := fmt.Sprintf("%s:%s@(%s:3306)/?charset=utf8&parseTime=True", user, pass, host)
+	user := "kiettran"
+	pass := "quantrimang@2003"
+	host := "testconnect.mysql.database.azure.com"
+	db := "gotodo"
+
+	credentials := fmt.Sprintf("%s:%s@(%s:3306)/%s?charset=utf8&parseTime=True", user, pass, host, db)
 
 	database, err := sql.Open("mysql", credentials)
 
@@ -46,7 +50,7 @@ func Database() *sql.DB {
 		fmt.Println("Database Connection Successful")
 	}
 
-	_, err = database.Exec(`CREATE DATABASE gotodo`)
+	//_, err = database.Exec(`CREATE DATABASE gotodo`)
 
 	if err != nil {
 		fmt.Println(err)
@@ -58,14 +62,14 @@ func Database() *sql.DB {
 		fmt.Println(err)
 	}
 
-	_, err = database.Exec(`
-		CREATE TABLE todos (
-		    id INT AUTO_INCREMENT,
-		    item TEXT NOT NULL,
-		    completed BOOLEAN DEFAULT FALSE,
-		    PRIMARY KEY (id)
-		);
-	`)
+	// _, err = database.Exec(`
+	// 	CREATE TABLE todos (
+	// 	    id INT AUTO_INCREMENT,
+	// 	    item TEXT NOT NULL,
+	// 	    completed BOOLEAN DEFAULT FALSE,
+	// 	    PRIMARY KEY (id)
+	// 	);
+	// `)
 
 	if err != nil {
 		fmt.Println(err)
